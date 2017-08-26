@@ -4,7 +4,7 @@
 //See limitations of Arduino SoftwareSerial
 
 SoftwareSerial mySerial(10,11);
-
+//test
 void setup() {
   mySerial.begin(38400);
 }
