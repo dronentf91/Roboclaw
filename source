@@ -1,0 +1,52 @@
+//ROBOclaw IO
+
+
+ Serial.begin(9600);
+}
+  void loop() 
+  {
+    
+  
+    sensorValuethrottle = analogRead(throttlePin);    
+    sensorValuesteering = analogRead(steeringPin);
+    
+    MoutputValueS1 =  map(sensorValuethrottle, 0, 1023, -20, 127);
+    MoutputValueS2 =  map(sensorValuesteering, 0, 1023, -127, 127);
+
+
+      
+     if(MoutputValueS1 < 45)                              //pevents steering from moving wheels with no pedal input
+        {
+          outputValueS1 = MoutputValueS1;
+          outputValueS2 = MoutputValueS1;
+
+          analogWrite(analogOutPinS1, outputValueS1);        
+          analogWrite(analogOutPinS2, outputValueS2); 
+        }   
+      else if(MoutputValueS1 > 45 && MoutputValueS2 < 0)  //with throttle input and turing left the Motor 1 slows 
+        {
+          outputValueS1 = (MoutputValueS1 + (.2 * MoutputValueS2));
+          outputValueS2 = MoutputValueS1;
+
+          analogWrite(analogOutPinS1, outputValueS1);        
+          analogWrite(analogOutPinS2, outputValueS2); 
+        }
+      
+      else if(MoutputValueS1 > 45 && MoutputValueS2 >= 0)  //with throttle input and turing left the Motor 2 slows
+        { 
+          outputValueS1 = MoutputValueS1;
+          outputValueS2 = (MoutputValueS1 - (.2 * MoutputValueS2));
+
+          analogWrite(analogOutPinS1, outputValueS1);        
+          analogWrite(analogOutPinS2, outputValueS2); 
+        }     
+
+         Serial.print("sensor = ");
+         Serial.print(MoutputValueS1);
+         Serial.print("\t output = ");
+         Serial.println(outputValueS1);
+         Serial.print("sensor = ");
+         Serial.print(MoutputValueS2);
+         Serial.print("\t output = ");
+         Serial.println(outputValueS2);
+}
